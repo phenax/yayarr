@@ -1,6 +1,7 @@
 package storage
 
 import (
+	"github.com/jmoiron/sqlx"
 	"log"
 )
 
@@ -28,6 +29,15 @@ func (s *Storage) CreateFolder(title string) *Folder {
 		return nil
 	}
 	return &Folder{Id: id, Title: title, IsExpanded: expanded}
+}
+
+func (s *Storage) RemoveFoldersExcept(folderNames []string) bool {
+	query, args, _ := sqlx.In(`delete from folders where title NOT IN (?)`, folderNames)
+	_, err := s.db.Exec(query, args...)
+	if err != nil {
+		log.Print(err)
+	}
+	return err == nil
 }
 
 func (s *Storage) DeleteFolder(folderId int64) bool {

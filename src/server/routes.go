@@ -430,6 +430,8 @@ func (s *Server) handleSettings(c *router.Context) {
 func (s *Server) handleOPMLImport(c *router.Context) {
 	if c.Req.Method == "POST" {
 		file, _, err := c.Req.FormFile("opml")
+		replace := c.Req.FormValue("replace") == "true"
+
 		if err != nil {
 			log.Print(err)
 			return
@@ -440,14 +442,26 @@ func (s *Server) handleOPMLImport(c *router.Context) {
 			c.Out.WriteHeader(http.StatusBadRequest)
 			return
 		}
+
+		urls := []string{}
+		folders := []string{}
 		for _, f := range doc.Feeds {
 			s.db.CreateFeed(f.Title, "", f.SiteUrl, f.FeedUrl, nil)
+			urls = append(urls, f.FeedUrl)
 		}
 		for _, f := range doc.Folders {
 			folder := s.db.CreateFolder(f.Title)
+			folders = append(folders, f.Title)
+
 			for _, ff := range f.AllFeeds() {
+				urls = append(urls, ff.FeedUrl)
 				s.db.CreateFeed(ff.Title, "", ff.SiteUrl, ff.FeedUrl, &folder.Id)
 			}
+		}
+
+		if replace {
+			s.db.RemoveFeedsExcept(urls)
+			s.db.RemoveFoldersExcept(folders)
 		}
 
 		s.worker.FindFavicons()

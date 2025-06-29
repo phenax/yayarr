@@ -2,6 +2,7 @@ package storage
 
 import (
 	"database/sql"
+	"github.com/jmoiron/sqlx"
 	"log"
 )
 
@@ -43,6 +44,15 @@ func (s *Storage) CreateFeed(title, description, link, feedLink string, folderId
 		FeedLink:    feedLink,
 		FolderId:    folderId,
 	}
+}
+
+func (s *Storage) RemoveFeedsExcept(feedUrls []string) bool {
+	query, args, _ := sqlx.In(`delete from feeds where feed_link NOT IN (?)`, feedUrls)
+	_, err := s.db.Exec(query, args...)
+	if err != nil {
+		log.Print(err)
+	}
+	return err == nil
 }
 
 func (s *Storage) DeleteFeed(feedId int64) bool {

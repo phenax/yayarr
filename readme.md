@@ -1,4 +1,4 @@
-# yayarr (fork of yarr)
+# yayarr (my fork of yarr)
 
 **yarr** (yet another rss reader) is a web-based feed aggregator which can be used both
 as a desktop application and a personal self-hosted server.
