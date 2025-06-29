@@ -227,7 +227,29 @@ Vue.component('relative-time', {
   },
 })
 
-var vm = new Vue({
+const router = {
+  currentRoute: '',
+  routes: {},
+  _onChange() {
+    router.currentRoute = location.hash.replace(/^#/, '')
+
+    for (const [route, onRoute] of Object.entries(router.routes)) {
+      const match = new RegExp(`^${route}$`).exec(router.currentRoute)
+      if (match)
+        onRoute(match.groups ?? {})
+    }
+  },
+  configure: (routes) => Object.assign(router.routes, routes),
+  init() {
+    requestAnimationFrame(() => router._onChange())
+    window.addEventListener('hashchange', router._onChange)
+  },
+  push(route) {
+    location.hash = route
+  },
+}
+
+const vm = new Vue({
   created: function() {
     this.refreshStats()
       .then(this.refreshFeeds.bind(this))
@@ -236,6 +258,24 @@ var vm = new Vue({
     api.feeds.list_errors().then(function(errors) {
       vm.feed_errors = errors
     })
+
+    router.configure({
+      '/feed:(?<feedId>\\d+)/?.*': (params) => {
+        vm.feedSelected = `feed:${params.feedId}`
+      },
+      '/folder:(?<folderId>\\d+)/?.*': (params) => {
+        vm.feedSelected = `folder:${params.folderId}`
+      },
+      '/all/?.*': () => {
+        vm.feedSelected = ''
+      },
+      '/[^/]+/(?<itemId>\\d+)': (params) => {
+        vm.itemSelected = Number(params.itemId)
+      },
+    })
+  },
+  mounted() {
+    router.init()
   },
   data: function() {
     var s = app.settings
@@ -372,9 +412,15 @@ var vm = new Vue({
       if (oldVal === undefined) return  // do nothing, initial setup
       api.settings.update({feed: newVal}).then(this.refreshItems.bind(this, false))
       this.itemSelected = null
+      router.push(`/${newVal || 'all'}`)
       if (this.$refs.itemlist) this.$refs.itemlist.scrollTop = 0
     },
     'itemSelected': function(newVal, oldVal) {
+      if (newVal) {
+        router.push(`/${this.feedSelected || 'all'}/${newVal}`)
+      } else {
+        router.push(`/${this.feedSelected ?? 'all'}`)
+      }
       this.itemSelectedReadability = ''
       if (newVal === null) {
         this.itemSelectedDetails = null
