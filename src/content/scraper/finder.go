@@ -4,7 +4,7 @@ import (
 	"net/url"
 	"strings"
 
-	"github.com/nkanaev/yarr/src/content/htmlutil"
+	"github.com/phenax/yayarr/src/content/htmlutil"
 	"golang.org/x/net/html"
 )
 

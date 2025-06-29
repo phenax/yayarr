@@ -11,17 +11,17 @@ import (
 	"strconv"
 	"strings"
 
-	"github.com/nkanaev/yarr/src/assets"
-	"github.com/nkanaev/yarr/src/content/htmlutil"
-	"github.com/nkanaev/yarr/src/content/readability"
-	"github.com/nkanaev/yarr/src/content/sanitizer"
-	"github.com/nkanaev/yarr/src/content/silo"
-	"github.com/nkanaev/yarr/src/server/auth"
-	"github.com/nkanaev/yarr/src/server/gzip"
-	"github.com/nkanaev/yarr/src/server/opml"
-	"github.com/nkanaev/yarr/src/server/router"
-	"github.com/nkanaev/yarr/src/storage"
-	"github.com/nkanaev/yarr/src/worker"
+	"github.com/phenax/yayarr/src/assets"
+	"github.com/phenax/yayarr/src/content/htmlutil"
+	"github.com/phenax/yayarr/src/content/readability"
+	"github.com/phenax/yayarr/src/content/sanitizer"
+	"github.com/phenax/yayarr/src/content/silo"
+	"github.com/phenax/yayarr/src/server/auth"
+	"github.com/phenax/yayarr/src/server/gzip"
+	"github.com/phenax/yayarr/src/server/opml"
+	"github.com/phenax/yayarr/src/server/router"
+	"github.com/phenax/yayarr/src/storage"
+	"github.com/phenax/yayarr/src/worker"
 )
 
 func (s *Server) handler() http.Handler {

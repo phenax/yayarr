@@ -3,8 +3,8 @@
 package platform
 
 import (
-	"github.com/nkanaev/yarr/src/server"
-	"github.com/nkanaev/yarr/src/systray"
+	"github.com/phenax/yayarr/src/server"
+	"github.com/phenax/yayarr/src/systray"
 )
 
 func Start(s *server.Server) {

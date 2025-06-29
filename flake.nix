@@ -19,7 +19,7 @@
           LD_LIBRARY_PATH = "${lib.makeLibraryPath buildInputs}";
         };
 
-        packages.default = with pkgs; buildGoModule {
+        packages.default = with pkgs; buildGoModule rec {
           pname = "yayarr";
           version = "2.5.1";
           src = ./.;

@@ -10,7 +10,7 @@ import (
 	"reflect"
 	"testing"
 
-	"github.com/nkanaev/yarr/src/storage"
+	"github.com/phenax/yayarr/src/storage"
 )
 
 func TestStatic(t *testing.T) {

@@ -1,6 +1,6 @@
 package server
 
-import "github.com/nkanaev/yarr/src/storage"
+import "github.com/phenax/yayarr/src/storage"
 
 type ItemUpdateForm struct {
 	Status *storage.ItemStatus `json:"status,omitempty"`

@@ -3,7 +3,7 @@
 package platform
 
 import (
-	"github.com/nkanaev/yarr/src/server"
+	"github.com/phenax/yayarr/src/server"
 )
 
 func Start(s *server.Server) {
