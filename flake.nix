@@ -13,6 +13,7 @@
             go
             gnumake
             sqlite
+            gopls
           ];
 
           LD_LIBRARY_PATH = "${lib.makeLibraryPath buildInputs}";
