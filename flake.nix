@@ -31,6 +31,13 @@
             gnumake
             sqlite
           ];
+
+          meta = {
+            description = "phenax's personal fork of yarr";
+            mainProgram = "yarr";
+            homepage = "https://github.com/phenax/yayarr";
+            license = lib.licenses.mit;
+          };
         };
       });
 }
