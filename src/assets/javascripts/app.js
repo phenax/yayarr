@@ -249,6 +249,17 @@ const router = {
   },
 }
 
+const navigateToFilter = filter => {
+  router.push(`/${filter || 'all'}`)
+}
+const navigateToFeed = feed =>
+  router.push(`/${vm.filterSelected || 'all'}/${feed || 'all'}`)
+
+const navigateToFeedItem = item =>
+  item
+    ? router.push(`/${vm.filterSelected || 'all'}/${vm.feedSelected || 'all'}/${item}`)
+    : navigateToFeed(vm.feedSelected)
+
 const vm = new Vue({
   created: function() {
     this.refreshStats()
@@ -260,17 +271,20 @@ const vm = new Vue({
     })
 
     router.configure({
-      '/feed:(?<feedId>\\d+)/?.*': (params) => {
-        vm.feedSelected = `feed:${params.feedId}`
+      '/(?<filter>unread|starred|all)/?.*': ({ filter }) => {
+        vm.filterSelected = filter === 'all' ? '' : filter
       },
-      '/folder:(?<folderId>\\d+)/?.*': (params) => {
-        vm.feedSelected = `folder:${params.folderId}`
+      '/[^/]+/feed:(?<feedId>\\d+)/?.*': ({ feedId }) => {
+        vm.feedSelected = `feed:${feedId}`
       },
-      '/all/?.*': () => {
+      '/[^/]+/folder:(?<folderId>\\d+)/?.*': ({ folderId }) => {
+        vm.feedSelected = `folder:${folderId}`
+      },
+      '/[^/]+/all/?.*': () => {
         vm.feedSelected = ''
       },
-      '/[^/]+/(?<itemId>\\d+)': (params) => {
-        vm.itemSelected = Number(params.itemId)
+      '/[^/]+/[^/]+/(?<itemId>\\d+)': ({ itemId }) => {
+        vm.itemSelected = Number(itemId)
       },
     })
   },
@@ -406,21 +420,18 @@ const vm = new Vue({
       if (oldVal === undefined) return  // do nothing, initial setup
       api.settings.update({filter: newVal}).then(this.refreshItems.bind(this, false))
       this.itemSelected = null
+      navigateToFilter(newVal)
       this.computeStats()
     },
     'feedSelected': function(newVal, oldVal) {
       if (oldVal === undefined) return  // do nothing, initial setup
       api.settings.update({feed: newVal}).then(this.refreshItems.bind(this, false))
       this.itemSelected = null
-      router.push(`/${newVal || 'all'}`)
+      navigateToFeed(newVal)
       if (this.$refs.itemlist) this.$refs.itemlist.scrollTop = 0
     },
-    'itemSelected': function(newVal, oldVal) {
-      if (newVal) {
-        router.push(`/${this.feedSelected || 'all'}/${newVal}`)
-      } else {
-        router.push(`/${this.feedSelected ?? 'all'}`)
-      }
+    'itemSelected': function(newVal, _oldVal) {
+      navigateToFeedItem(newVal)
       this.itemSelectedReadability = ''
       if (newVal === null) {
         this.itemSelectedDetails = null
