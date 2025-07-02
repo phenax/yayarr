@@ -30,7 +30,7 @@ Vue.component('embeddable-link', {
   computed: {
     isYoutubeEmbed() { return Boolean(this.youtubeMatch) },
     isRedditEmbed() { return Boolean(this.redditMatch) },
-    youtubeMatch() { return /^https?:\/\/(www\.)?youtube\.com\/.*\?v=(?<videoId>[^&]+)/i.exec(this.src) },
+    youtubeMatch() { return /^https?:\/\/(www\.)?youtube\.com\/(.*\?v=|shorts\/)(?<videoId>[^&]+)/i.exec(this.src) },
     redditMatch() { return /^https?:\/\/(www\.)?reddit\.com\/.*/i.exec(this.src) },
     redditEmbedLink() {
       const link = this.src.replace(/(www.)?reddit.com/, 'embed.reddit.com').replace(/\?.*$/, '')
@@ -38,9 +38,7 @@ Vue.component('embeddable-link', {
     },
     youtubeEmbedLink() {
       const ytMatch = this.youtubeMatch
-      if (ytMatch?.groups?.videoId)
-        return `https://youtube.com/embed/${ytMatch?.groups?.videoId}`;
-      return null
+      return ytMatch?.groups?.videoId && `https://youtube.com/embed/${ytMatch?.groups?.videoId}`;
     },
   },
   mounted() {
@@ -51,12 +49,12 @@ Vue.component('embeddable-link', {
   },
   methods: {
     windowMessage(event) {
-      if (event.data && typeof(event.data) === 'string') {
+      if (event.data && typeof (event.data) === 'string') {
         try {
           const data = JSON.parse(event.data)
           if (data?.type == 'resize.embed')
             this.resizableIframeHeight = data.data
-        } catch(e) {}
+        } catch (e) { }
       }
     },
   },
