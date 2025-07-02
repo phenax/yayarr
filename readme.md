@@ -1,9 +1,18 @@
 # yayarr (my fork of yarr)
 
+Since yarr is [feature complete](https://github.com/nkanaev/yarr/issues/57), this fork is meant for me to add features that I want in my feed reader.
+
 **yarr** (yet another rss reader) is a web-based feed aggregator which can be used both
 as a desktop application and a personal self-hosted server.
 
 The app is a single binary with an embedded database (SQLite).
+
+### Additional features on top of yarr
+- Embed youtube/reddit
+- Swipe left/right gestures for touch devices
+- Hash-routing links to persist page state on reload
+- Minor ui changes
+
 
 ![screenshot](etc/promo.png)
 
