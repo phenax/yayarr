@@ -365,6 +365,7 @@
                     </div>
                     <hr>
                     <div v-if="!itemSelectedReadability">
+                        <embeddable-link :src="itemSelectedDetails.link" />
                         <div v-if="contentImages.length">
                             <figure v-for="media in contentImages">
                                 <img :src="media.url" loading="lazy">
@@ -441,7 +442,7 @@
     <script src="./static/javascripts/hammerjs.min.js"></script>
     <!-- internal -->
     <script src="./static/javascripts/api.js"></script>
-    <script src="./static/javascripts/app.js"></script>
+    <script src="./static/javascripts/app.js" type="module"></script>
     <script src="./static/javascripts/key.js"></script>
 </body>
 </html>
