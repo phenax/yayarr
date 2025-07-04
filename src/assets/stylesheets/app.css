@@ -2,6 +2,10 @@
   display: none !important;
 }
 
+:root {
+  --color-accent: #007070;
+}
+
 html {
   font-size: 15px !important;
 }
@@ -455,7 +459,7 @@ button.theme-light {
 
 a,
 .btn-link:hover {
-  color: #0080d4;
+  color: var(--color-accent);
 }
 
 .toolbar-item.active,
@@ -463,12 +467,12 @@ a,
 .dropdown-item:active,
 .selectgroup input:checked + .selectgroup-label {
   color: #fff;
-  background-color: #0080d4 !important;
+  background-color: var(--color-accent) !important;
 }
 
 .btn-default:focus,
 .form-control:focus {
-  border-color: #0080d4;
+  border-color: var(--color-accent);
 }
 
 /* theme: sepia */
