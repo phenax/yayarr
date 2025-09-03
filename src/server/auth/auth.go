@@ -26,7 +26,7 @@ func Authenticate(rw http.ResponseWriter, username, password, basepath string) {
 	http.SetCookie(rw, &http.Cookie{
 		Name:    "auth",
 		Value:   username + ":" + secret(username, password),
-		Expires: time.Now().Add(time.Hour * 24 * 7), // 1 week,
+		Expires: time.Now().Add(time.Hour * 24 * 99999), // why expire at all
 		Path:    basepath,
 	})
 }
